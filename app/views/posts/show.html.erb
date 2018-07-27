@@ -1,1 +1,24 @@
+<h1><%= @post.title %></h1>
+<p><%= @post.content %></p>
 
+<ul>
+  <% @post.comments.each do |comment| %>
+    <%= comment.content %>
+  <% end %>
+</ul>
+
+<ul>
+  <% @post.users.each do |user| %>
+    <%= user.username %>
+  <% end %>
+</ul>
+
+<%= form_for @post.comments do |f| %>
+  <%= f.label "Comment" %>
+  <%= f.text_field :comment_content %>
+  <%= f.collection_check_boxes :user_id, User.all, :id, :username %>
+  <%= f.fields_for :users, comment.users.build do |users_fields| %>
+    <%= users_fields.text_field :username %>
+  <% end %>
+  <%= f.submit %>
+<% end %>
